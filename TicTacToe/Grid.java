@@ -41,22 +41,30 @@ public class Grid {
 		System.out.println("==============");
 	}
 
+	private char AtIndex (int idx) {
+		return this.mat[idx/3][idx%3];
+	}
 	// 0 .. 8
 	private boolean Eq (int i1, int i2, int i3) {
-		int r1 = i1 / 3;
-		int c1 = i1 % 3;
-		int r2 = i2 / 3;
-		int c2 = i2 % 3;
-		int r3 = i3 / 3;
-		int c3 = i3 % 3;
 		return (
-			this.mat[r1][c1] == this.mat[r2][c2] &&
-			this.mat[r1][c1] == this.mat[r3][c3] &&
-			this.mat[r2][c2] == this.mat[r3][c3]
+			this.AtIndex(i1) == this.AtIndex(i2) &&
+			this.AtIndex(i1) == this.AtIndex(i3) &&
+			this.AtIndex(i2) == this.AtIndex(i3)
 		);
 	}
+	public boolean IsFull () {
+		for (int r = 0; r < 3; r += 1) {
+			for (int c = 0; c < 3; c += 1) {
+				if (this.mat[r][c] == ' ') {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
 	public char WhoWins () {
-		//return this.mat[2][2];
+		// all the winning situations:
 		int[][] wins = {
 			{0, 1, 2},
 			{3, 4, 5},
@@ -69,7 +77,7 @@ public class Grid {
 		}; // [8][3]
 		for (int i = 0; i < 8; i += 1) {
 			if (this.Eq(wins[i][0], wins[i][1], wins[i][2])) {
-				return (this.mat[wins[i][0]/3][wins[i][0]%3]);
+				return this.AtIndex(wins[i][0]);
 			}
 		}
 		return ' ';
